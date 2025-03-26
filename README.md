@@ -30,6 +30,13 @@ Update `.env` file with database credentials and other configurations.
 php artisan key:generate
 ```
 
+### 4. Migrate database tables
+```sh
+php artisan migrate
+```
+```sh
+php artisan optimize:clear
+```
 ### 6. Start Development Server
 ```sh
 php artisan serve
