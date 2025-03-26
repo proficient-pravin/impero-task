@@ -32,7 +32,7 @@
                 <tbody>
                     @foreach ($availability as $date => $data)
                         <tr>
-                            <td>{{ $date }}</td>
+                        <td>{{ \Carbon\Carbon::parse($date)->format('l, d M Y') }}</td>
                             <td>
                                 <span class="badge {{ $data['status'] == 'available' ? 'bg-success' : 'bg-danger' }}">
                                     {{ ucfirst($data['status']) }}
