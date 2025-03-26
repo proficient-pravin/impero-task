@@ -1,26 +1,31 @@
 <?php
 
 use App\Http\Controllers\BranchController;
-
-Route::get('/', function () {
-    return view('welcome');
-});
-
 use App\Http\Controllers\BusinessController;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', [BranchController::class, 'index']); // Homepage showing branches and status
-
-Route::prefix('businesses')->group(function () {
-    Route::get('/', [BusinessController::class, 'index'])->name('businesses.index');
-    Route::get('/create', [BusinessController::class, 'create'])->name('businesses.create');
-    Route::post('/', [BusinessController::class, 'store'])->name('businesses.store');
-    Route::delete('/{id}', [BusinessController::class, 'destroy'])->name('businesses.destroy');
+Route::get('/', [BusinessController::class, 'index']);
+Route::prefix('businesses')->name('businesses.')->group(function () {
+    Route::controller(BusinessController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{id}/branches', 'branches')->name('branches');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+        Route::get('/data', 'getData')->name('data');
+    });
 });
 
-Route::prefix('branches')->group(function () {
-    Route::get('/{id}', [BranchController::class, 'show'])->name('branches.show');
-    Route::get('/create/{business_id}', [BranchController::class, 'create'])->name('branches.create');
-    Route::post('/', [BranchController::class, 'store'])->name('branches.store');
-    Route::delete('/{id}', [BranchController::class, 'destroy'])->name('branches.destroy');
+Route::prefix('branches')->name('branches.')->group(function () {
+    Route::controller(BranchController::class)->group(function () {
+        Route::get('/{id}', 'show')->name('show');
+        Route::get('/data/{business_id}', 'getData')->name('data');
+        Route::get('/create/{business_id}', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+
+        Route::get('/{id}/availability', 'editAvailability')->name('availability');
+        Route::post('/{id}/availability', 'updateAvailability')->name('availability.update');
+        Route::get('/{branch}/availability/show', 'showAvailability')->name('availability.show');
+    });
 });
